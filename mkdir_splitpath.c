@@ -34,12 +34,12 @@ void mkdir(char pathName[]){
     char baseName[64];
     char dirName[256];
 
-    if (strcmp(pathName, "/") == 0 || strcmp(pathName, "") == 0) {
+    struct NODE* parentNode = splitPath(pathName, baseName, dirName);
+
+    if (strlen(baseName) == 0) {
         printf("MKDIR ERROR: no path provided\n");
         return;
     }
-
-    struct NODE* parentNode = splitPath(pathName, baseName, dirName);
 
     if (parentNode == NULL) {
         return;  // splitPath() handles non-existent directories
@@ -48,9 +48,9 @@ void mkdir(char pathName[]){
     // Check if the directory already exists
     struct NODE* child = parentNode->childPtr;
     while (child != NULL) {
-        if (strcmp(child->name, baseName) == 0 && child->fileType == 'D') {
-            printf("MKDIR ERROR: directory %s already exists\n", baseName);
-            return;
+        if (strcmp(child->name, baseName) == 0 && child->fileType == 'D'){
+		printf("MKDIR ERROR: directory %s already exists\n", baseName);
+		return;
         }
         child = child->siblingPtr;
     }
@@ -119,8 +119,8 @@ struct NODE* splitPath(char* pathName, char* baseName, char* dirName){
     }
 
     // Debugging Line
-    printf("Base Name is: %s\n",baseName);
-    printf("Dir Name is: %s\n",dirName);
+    //printf("Base Name is: %s\n",baseName);
+    //printf("Dir Name is: %s\n",dirName);
 
     // Tokenizing
     
